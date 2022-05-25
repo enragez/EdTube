@@ -1,0 +1,34 @@
+﻿@page
+@model EdTube.Pages.Author.Requests
+
+@{
+    ViewData["Title"] = "Заявки";
+}
+
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Имя пользователя</th>
+        <th>Категория</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.RequestsList)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category)
+            </td>
+            <td>
+                <a asp-page="./ApproveRequest" asp-route-id="@item.Id">Принять</a> |
+                <a asp-page="./DeclineRequest" asp-route-id="@item.Id">Отклонить</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

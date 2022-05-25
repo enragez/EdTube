@@ -1,0 +1,48 @@
+﻿@page
+@using EdTube.Models
+@model EdTube.Pages.Categories.ViewModel
+
+@{
+    ViewData["Title"] = $"Видео из категории {Model.CategoryModel.Name}";
+}
+
+<style>
+    img {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 32px;
+    }
+        
+    .category-name {
+        font-size: 24px;
+        font-weight: 700;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-2 d-flex justify-content-center">
+        <img src="data:image/jpeg;base64,@(Model.CategoryModel.Poster != null ? Convert.ToBase64String(Model.CategoryModel.Poster) : VideoCategoryModel.EmptyPoster)" alt="@Model.CategoryModel.Name"/>
+    </div>
+    <div class="col-md-4">
+        <div class="category-name">@Model.CategoryModel.Name</div>
+    </div>
+</div>
+
+<table class="table" style="margin-top: 16px">
+    <thead>
+    <tr>
+        <th>Название</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.Videos)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

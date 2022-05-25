@@ -1,0 +1,26 @@
+﻿@page
+@model EdTube.Pages.Users.DeleteModel
+
+@{
+    ViewData["Title"] = "Удалить пользователя";
+}
+
+<h1>Удалить пользователя</h1>
+
+<h3>Вы действительно хотите удалить этого пользователя?</h3>
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Model.UserModel.Name
+        </dt>
+        <dd class="col-sm-10">
+            @Model.UserModel.Email
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="UserModel.Id" />
+        <input type="submit" value="Удалить" class="btn btn-danger" /> |
+        <a asp-page="./Index">Назад к списку</a>
+    </form>
+</div>

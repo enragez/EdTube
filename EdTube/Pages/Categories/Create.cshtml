@@ -1,0 +1,39 @@
+﻿@page
+@model EdTube.Pages.Categories.CreateModel
+
+@{
+    ViewData["Title"] = "Добавить категорию";
+}
+
+<h1>Добавить фильм</h1>
+
+<h4>Фильм</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-floating">
+                <input asp-for="CategoryModel.Name" class="form-control" />
+                <label asp-for="CategoryModel.Name"></label>
+                <span asp-validation-for="CategoryModel.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="margin-top: 8px">
+                <label asp-for="CategoryModel.File"></label>
+                <input type="file" asp-for="CategoryModel.File" class="form-control"/>
+                <span asp-validation-for="CategoryModel.File" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="margin-top: 8px">
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Назад к списку</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Панель администратора";
+}
+
+<style>
+    #wrapper {
+        width:  100%;
+    }
+    #wrapper #sidebar-wrapper{
+        width: 50px;
+    }
+
+    #wrapper .sidebar-nav{
+        display:none;
+    }
+
+    #wrapper.toggled .sidebar-nav{
+        display:block;
+    }
+</style>
+
+<div id="wrapper" class="toggled">
+
+    <!-- you nav on left side -->
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav" style="margin-top:15px;">
+            <li class="sidebar-brand">
+                <a asp-area="" asp-page="/Users/Index" class="navbar-brand">Пользователи</a>
+            </li>
+            <li>
+                <a asp-area="" asp-page="/Categories/Index" class="navbar-brand">Категории</a>
+            </li>
+            <li>
+                <a asp-area="" asp-page="/Author/Requests" class="navbar-brand">Заявки стать автором</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- your main body here -->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+        </div>
+    </div>
+</div>

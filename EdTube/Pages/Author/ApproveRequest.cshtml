@@ -1,0 +1,23 @@
+﻿@page
+@model EdTube.Pages.Author.ApproveRequest
+
+@{
+    ViewData["Title"] = "Подтвердить заявку";
+}
+
+<h1>Подтвердить заявку</h1>
+
+<h3>Вы действительно хотите подтвердить эту заявку?</h3>
+<div>
+    <dl class="row">
+        <dt class="col-sm-3">
+            @($"{Model.AuthorRequestModel.UserName}. Категория: {Model.AuthorRequestModel.Category}")
+        </dt>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="AuthorRequestModel.Id" />
+        <input type="submit" value="Подтвердить" class="btn btn-primary" /> |
+        <a asp-page="./Requests">Назад к списку</a>
+    </form>
+</div>

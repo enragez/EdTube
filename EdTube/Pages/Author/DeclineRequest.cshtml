@@ -1,0 +1,23 @@
+﻿@page
+@model EdTube.Pages.Author.DeclineRequest
+
+@{
+    ViewData["Title"] = "Отклонить заявку";
+}
+
+<h1>Отклонить заявку</h1>
+
+<h3>Вы действительно хотите отклонить эту заявку?</h3>
+<div>
+    <dl class="row">
+        <dt class="col-sm-3">
+            @($"{Model.AuthorRequestModel.UserName}. Категория: {Model.AuthorRequestModel.Category}")
+        </dt>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="AuthorRequestModel.Id" />
+        <input type="submit" value="Отклонить" class="btn btn-danger" /> |
+        <a asp-page="./Requests">Назад к списку</a>
+    </form>
+</div>
