@@ -20,29 +20,17 @@ public class Requests : PageModel
     
     public async Task<IActionResult> OnGetAsync()
     {
-        var result = new List<AuthorRequestModel>();
+        var requests = await _context.BecomeAuthorRequests.Where(r => !r.Approved && !r.Declined).ToListAsync();
 
-        var requests = _context.BecomeAuthorRequests.Where(r => !r.Approved && !r.Declined);
-
-        foreach (var request in requests)
-        {
-            var user = await _context.Users.FirstOrDefaultAsync(u => request.UserId == u.Id);
-            if (user == null)
-            {
-                continue;
-            }
-            
-            result.Add(new AuthorRequestModel
+        RequestsList = requests.Select(request => new AuthorRequestModel
             {
                 Id = request.Id,
-                UserName = user.UserName,
-                UserId = user.Id,
+                UserName = request.User.UserName,
+                UserId = request.User.Id,
                 Approved = false,
                 Category = request.Category
-            });
-        }
-        
-        RequestsList = result;
+            })
+            .ToList();
         
         return Page();
     }

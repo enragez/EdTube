@@ -39,9 +39,11 @@ public class Become : PageModel
             return Page();
         }
 
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == Model.UserId);
+        
         var newRequest = new BecomeAuthorRequest
         {
-            UserId = Model.UserId,
+            User = user,
             Category = !string.IsNullOrEmpty(Model.NewCategory) ? Model.NewCategory : Model.SelectedCategory,
             Approved = false,
             Declined = false

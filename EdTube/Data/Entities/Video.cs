@@ -1,8 +1,12 @@
-﻿namespace EdTube.Data.Entities;
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace EdTube.Data.Entities;
 
 public class Video
 {
     public int Id { get; set; }
+    
+    public IdentityUser User { get; set; }
     
     public string Name { get; set; }
     

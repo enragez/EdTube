@@ -25,16 +25,22 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">На главную</a>
                     </li>
-                    @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Администратор"))
+                    @if (User.Identity is {IsAuthenticated: true } && User.IsInRole("Администратор"))
                     {
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Панель администратора</a>
                         </li>
                     }
-                    @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Зритель") && !User.IsInRole("Администратор"))
+                    @if (User.Identity is {IsAuthenticated: true } && User.IsInRole("Зритель") && !User.IsInRole("Администратор"))
                     {
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Author" asp-action="Become">Стать автором</a>
+                        </li>
+                    }
+                    @if (User.Identity is {IsAuthenticated: true } && User.IsInRole("Автор"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Video" asp-action="Upload">Загрузить видео</a>
                         </li>
                     }
                 </ul>

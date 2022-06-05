@@ -1,6 +1,7 @@
 ﻿using EdTube.Data;
 using EdTube.Data.Entities;
 using EdTube.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -10,10 +11,12 @@ namespace EdTube.Pages.Author;
 public class ApproveRequest : PageModel
 {
     private readonly ApplicationDbContext _context;
+    private readonly UserManager<IdentityUser> _userManager;
 
-    public ApproveRequest(ApplicationDbContext context)
+    public ApproveRequest(ApplicationDbContext context, UserManager<IdentityUser> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
     
     [BindProperty]
@@ -32,14 +35,14 @@ public class ApproveRequest : PageModel
         {
             return NotFound();
         }
-        
+
         AuthorRequestModel = new AuthorRequestModel
         {
             Id = request.Id,
             Approved = false,
             Category = request.Category,
-            UserId = request.UserId,
-            UserName = (await _context.Users.FirstAsync(u => request.UserId == u.Id)).UserName
+            UserId = request.User.Id,
+            UserName = request.User.UserName
         };
 
         return Page();
@@ -62,9 +65,20 @@ public class ApproveRequest : PageModel
 
             _context.Categories.Add(category);
         }
-        
-        await _context.SaveChangesAsync();
 
+        var user = await _userManager.FindByIdAsync(AuthorRequestModel.UserId);
+
+        if (await _userManager.IsInRoleAsync(user, "Автор"))
+        {
+            await _context.SaveChangesAsync();
+        }
+        else
+        {
+            await _userManager.AddToRoleAsync(user, "Автор");
+        
+            await _context.SaveChangesAsync();
+        }
+        
         return RedirectToPage("./Requests");
     }
 }

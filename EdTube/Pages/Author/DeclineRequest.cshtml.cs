@@ -37,8 +37,8 @@ public class DeclineRequest : PageModel
             Id = request.Id,
             Approved = false,
             Category = request.Category,
-            UserId = request.UserId,
-            UserName = (await _context.Users.FirstAsync(u => request.UserId == u.Id)).UserName
+            UserId = request.User.Id,
+            UserName = request.User.UserName
         };
 
         return Page();

@@ -1,0 +1,53 @@
+﻿@page
+@model EdTube.Pages.Video.Upload
+@{
+    ViewData["Title"] = "Загрузить видео";
+}
+
+<style>
+    #wrapper {
+        width:  100%;
+    }
+    #wrapper #sidebar-wrapper{
+        width: 50px;
+    }
+
+    #wrapper .sidebar-nav{
+        display:none;
+    }
+
+    #wrapper.toggled .sidebar-nav{
+        display:block;
+    }
+</style>
+
+<div id="wrapper" class="toggled">
+
+    <div class="row">
+        <div class="col-md-4">
+            <form method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="UploadModel.UserId" />
+                <input type="hidden" asp-for="UploadModel.Categories" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-floating">
+                    <select asp-for="UploadModel.SelectedCategory" asp-items="Model.UploadModel.Categories" class="form-control"></select>
+                    <label asp-for="UploadModel.SelectedCategory"></label>
+                    <span asp-validation-for="UploadModel.SelectedCategory" class="text-danger"></span>
+                </div>
+                 <div class="form-floating">
+                    <input asp-for="UploadModel.Name" class="form-control" />
+                    <label asp-for="UploadModel.Name"></label>
+                    <span asp-validation-for="UploadModel.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group" style="margin-top: 8px">
+                    <label asp-for="UploadModel.Video"></label>
+                    <input type="file" asp-for="UploadModel.Video" class="form-control" accept="video/*"/>
+                    <span asp-validation-for="UploadModel.Video" class="text-danger"></span>
+                </div>
+                <div class="form-group" style="margin-top: 8px">
+                    <input type="submit" value="Загрузить видео" class="btn btn-primary"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
