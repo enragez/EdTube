@@ -10,13 +10,14 @@
 <h3>Вы действительно хотите подтвердить эту заявку?</h3>
 <div>
     <dl class="row">
-        <dt class="col-sm-3">
-            @($"{Model.AuthorRequestModel.UserName}. Категория: {Model.AuthorRequestModel.Category}")
+        <dt>
+            @($"{Model.AuthorRequestModel.UserName}. Название канала: {Model.AuthorRequestModel.ChannelName} Категория: {Model.AuthorRequestModel.Category}")
         </dt>
     </dl>
     
     <form method="post">
         <input type="hidden" asp-for="AuthorRequestModel.Id" />
+        <input type="hidden" asp-for="AuthorRequestModel.UserId" />
         <input type="submit" value="Подтвердить" class="btn btn-primary" /> |
         <a asp-page="./Requests">Назад к списку</a>
     </form>

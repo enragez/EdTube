@@ -22,10 +22,13 @@ public class Upload : PageModel
     
     public async Task<IActionResult> OnGetAsync()
     {
+        var userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+        var userCategories = await 
+            _context.Channels.Where(c => c.User.Id == userId).Select(c => c.Category.Name).ToListAsync();
         UploadModel = new UploadVideoModel
         {
-            UserId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value,
-            Categories = new SelectList(await _context.Categories.Select(c => c.Name).ToListAsync())
+            UserId = userId,
+            Categories = new SelectList(userCategories)
         };
         
         return Page();
@@ -40,6 +43,7 @@ public class Upload : PageModel
 
         var category = await _context.Categories.FirstOrDefaultAsync(c => c.Name == UploadModel.SelectedCategory);
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == UploadModel.UserId);
+        var channel = await _context.Channels.FirstOrDefaultAsync(c => c.Category.Id == category.Id && c.User.Id == user.Id);
         var ms = new MemoryStream();
         await UploadModel.Video.CopyToAsync(ms);
 
@@ -48,7 +52,9 @@ public class Upload : PageModel
             Category = category,
             Name = UploadModel.Name,
             User = user,
-            Content = ms.ToArray()
+            Channel = channel,
+            Content = ms.ToArray(),
+            FileName = UploadModel.Video.FileName
         };
         
         await _context.Videos.AddAsync(newVideo);

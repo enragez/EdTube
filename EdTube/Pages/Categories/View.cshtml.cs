@@ -15,7 +15,7 @@ public class ViewModel : PageModel
         _context = context;
     }
     
-    public List<VideoModel> Videos { get; set; }
+    public List<VideoChannelModel> Channels { get; set; }
     
     public VideoCategoryModel CategoryModel { get; set; }
 
@@ -29,14 +29,17 @@ public class ViewModel : PageModel
             Name = videoCategory.Name,
             Poster = videoCategory.Poster
         };
-        
-        Videos = await _context.Videos
-            .Where(fs => fs.Category.Id == id.Value)
-            .Select(u => new VideoModel
+
+        Channels = await _context.Channels
+            .Include(c => c.User)
+            .Where(c => c.Category.Id == id.Value)
+            .Select(c => new VideoChannelModel
             {
-                Id = u.Id,
-                Name = u.Name,
-                Content = u.Content
+                Id = c.Id,
+                Name = c.Name,
+                Category = CategoryModel,
+                UserId = c.User.Id,
+                Poster = c.Poster
             })
             .ToListAsync();
     }

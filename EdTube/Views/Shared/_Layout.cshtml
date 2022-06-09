@@ -34,7 +34,7 @@
                     @if (User.Identity is {IsAuthenticated: true } && User.IsInRole("Зритель") && !User.IsInRole("Администратор"))
                     {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Author" asp-action="Become">Стать автором</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Author" asp-action="Become">Создать канал</a>
                         </li>
                     }
                     @if (User.Identity is {IsAuthenticated: true } && User.IsInRole("Автор"))

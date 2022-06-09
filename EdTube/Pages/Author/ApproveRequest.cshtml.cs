@@ -29,7 +29,9 @@ public class ApproveRequest : PageModel
             return NotFound();
         }
 
-        var request = await _context.BecomeAuthorRequests.FirstOrDefaultAsync(m => m.Id == id);
+        var request = await _context.BecomeAuthorRequests
+            .Include(r => r.User)
+            .FirstOrDefaultAsync(r => r.Id == id);
         
         if (request == null)
         {
@@ -39,6 +41,7 @@ public class ApproveRequest : PageModel
         AuthorRequestModel = new AuthorRequestModel
         {
             Id = request.Id,
+            ChannelName = request.ChannelName,
             Approved = false,
             Category = request.Category,
             UserId = request.User.Id,
@@ -50,7 +53,9 @@ public class ApproveRequest : PageModel
     
     public async Task<IActionResult> OnPostAsync()
     {
-        var request = await _context.BecomeAuthorRequests.FirstAsync(m => m.Id == AuthorRequestModel.Id);
+        var request = await _context.BecomeAuthorRequests
+            .Include(r => r.User)
+            .FirstAsync(r => r.Id == AuthorRequestModel.Id);
 
         request.Approved = true;
         request.Declined = false;
@@ -66,6 +71,16 @@ public class ApproveRequest : PageModel
             _context.Categories.Add(category);
         }
 
+        var videoChannel = new VideoChannel
+        {
+            Name = request.ChannelName,
+            Category = category,
+            User = request.User,
+            Poster = request.Poster
+        };
+
+        _context.Channels.Add(videoChannel);
+        
         var user = await _userManager.FindByIdAsync(AuthorRequestModel.UserId);
 
         if (await _userManager.IsInRoleAsync(user, "Автор"))

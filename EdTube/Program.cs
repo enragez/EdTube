@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using EdTube.Data;
+using EdTube.Services;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 
@@ -45,6 +46,9 @@ builder.Services.Configure<KestrelServerOptions>(x =>
 {
     x.Limits.MaxRequestBodySize = int.MaxValue;
 });
+
+builder.Services.AddSingleton<IVideoProvider, VideoProvider>();
+builder.Services.AddSingleton<IThumbnailProvider, ThumbnailProvider>();
 
 var app = builder.Build();
 

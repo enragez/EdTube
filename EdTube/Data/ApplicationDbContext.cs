@@ -11,6 +11,8 @@ public sealed class ApplicationDbContext : IdentityDbContext
     public DbSet<Video> Videos { get; set; } = null!;
 
     public DbSet<BecomeAuthorRequest> BecomeAuthorRequests { get; set; } = null!;
+    
+    public DbSet<VideoChannel> Channels { get; set; } = null!;
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)

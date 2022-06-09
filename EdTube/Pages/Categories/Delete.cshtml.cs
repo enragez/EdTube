@@ -43,9 +43,12 @@ public class DeleteModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        var film = await _context.Categories.FirstOrDefaultAsync(m => m.Id == CategoryModel.Id);
+        var category = await _context.Categories.FirstOrDefaultAsync(m => m.Id == CategoryModel.Id);
 
-        _context.Categories.Remove(film);
+        var channels = await _context.Channels.Where(c => c.Category.Id == category.Id).ToListAsync();
+        
+        _context.Categories.Remove(category);
+        _context.Channels.RemoveRange(channels);
         await _context.SaveChangesAsync();
 
         return RedirectToPage("./Index");

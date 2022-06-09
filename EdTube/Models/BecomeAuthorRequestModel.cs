@@ -6,6 +6,9 @@ namespace EdTube.Models;
 public class BecomeAuthorRequestModel
 {
     public string UserId { get; set; }
+    
+    [Display(Name = "Название канала")]
+    public string ChannelName { get; set; }
 
     [Display(Name = "Выбрать категорию")]
     public string SelectedCategory { get; set; }
@@ -14,4 +17,7 @@ public class BecomeAuthorRequestModel
     public string? NewCategory { get; set; }
     
     public SelectList? Categories { get; set; }
+    
+    [Display(Name = "Обложка канала")]
+    public IFormFile File { get; set; }
 }

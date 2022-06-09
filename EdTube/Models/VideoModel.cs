@@ -9,6 +9,9 @@ public class VideoModel
     [Display(Name = "Название")]
     public string Name { get; set; }
     
-    [Display(Name = "Контент")]
-    public byte[] Content { get; set; }
+    public string FilePath { get; set; }
+    
+    public string ThumbnailFilePath { get; set; }
+    
+    public VideoChannelModel ChannelModel { get; set; }
 }

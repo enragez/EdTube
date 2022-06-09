@@ -41,12 +41,17 @@ public class Become : PageModel
 
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == Model.UserId);
         
+        var ms = new MemoryStream();
+        await Model.File.CopyToAsync(ms);
+        
         var newRequest = new BecomeAuthorRequest
         {
             User = user,
             Category = !string.IsNullOrEmpty(Model.NewCategory) ? Model.NewCategory : Model.SelectedCategory,
             Approved = false,
-            Declined = false
+            Declined = false,
+            ChannelName = Model.ChannelName,
+            Poster = ms.ToArray()
         };
         
         await _context.BecomeAuthorRequests.AddAsync(newRequest);

@@ -25,7 +25,9 @@ public class DeclineRequest : PageModel
             return NotFound();
         }
 
-        var request = await _context.BecomeAuthorRequests.FirstOrDefaultAsync(m => m.Id == id);
+        var request = await _context.BecomeAuthorRequests
+            .Include(r => r.User)
+            .FirstOrDefaultAsync(m => m.Id == id);
         
         if (request == null)
         {

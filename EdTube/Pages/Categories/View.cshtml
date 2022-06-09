@@ -31,16 +31,19 @@
 <table class="table" style="margin-top: 16px">
     <thead>
     <tr>
+        <th width="200px">Лого</th>
         <th>Название</th>
-        <th></th>
     </tr>
     </thead>
     <tbody>
-    @foreach (var item in Model.Videos)
+    @foreach (var item in Model.Channels)
     {
         <tr>
+            <td style="text-align: center">
+                <img style="width:100px;height: 100px;object-fit: cover" src="data:image/jpeg;base64,@(item.Poster != null ? Convert.ToBase64String(item.Poster) : VideoCategoryModel.EmptyPoster)" alt="item.Name"/>
+            </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                <a href="/Channel/View?id=@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
             </td>
         </tr>
     }

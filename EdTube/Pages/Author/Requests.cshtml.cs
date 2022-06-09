@@ -20,7 +20,9 @@ public class Requests : PageModel
     
     public async Task<IActionResult> OnGetAsync()
     {
-        var requests = await _context.BecomeAuthorRequests.Where(r => !r.Approved && !r.Declined).ToListAsync();
+        var requests = await _context.BecomeAuthorRequests
+            .Include(r => r.User)
+            .Where(r => !r.Approved && !r.Declined).ToListAsync();
 
         RequestsList = requests.Select(request => new AuthorRequestModel
             {

@@ -1,0 +1,47 @@
+﻿@page
+@using EdTube.Models
+@model EdTube.Pages.Channel.View
+
+@{
+    ViewData["Title"] = $"Видео с канала {Model.ChannelModel.Name}";
+}
+
+<script>
+    function onThumbnailClick(e){
+        var img = e.target;
+        var videoId = img.getAttribute('videoId');
+        var videoWrapper = document.querySelectorAll(`[videoWrapperId="${videoId}"]`)[0];
+        img.parentNode.setAttribute('hidden', '');
+        videoWrapper.removeAttribute('hidden');
+        videoWrapper.children[0].play();
+    }
+    
+    function onVideoEnded(e){
+        var video = e.target;
+        var videoWrapper = video.parentNode;
+        var videoId = videoWrapper.getAttribute('videoWrapperId');
+        var thumbnail = document.querySelectorAll(`[videoId="${videoId}"]`)[0];
+        thumbnail.parentNode.removeAttribute('hidden');
+        videoWrapper.setAttribute('hidden', '');
+    }
+</script>
+
+<style>
+</style>
+
+<div class="row">
+    @foreach (var item in Model.Videos)
+        {
+            <div class="d-flex flex-row border-bottom p-4 align-items-center justify-content-sm-between">
+                <h3>
+                    @item.Name
+                </h3>
+                <div class="video-thumbnail">
+                    <img role="button" videoId="@item.Id" src="@item.ThumbnailFilePath" alt="@item.Name" onclick="onThumbnailClick(arguments[0])"/>
+                </div>
+                <div hidden videoWrapperId="@item.Id">
+                    <video id="@($"VideoPlayer-{item.Id}")" src="@item.FilePath" controls width="640" height="480" onended="onVideoEnded(arguments[0])"/>
+                </div>
+            </div>
+        }
+</div>
