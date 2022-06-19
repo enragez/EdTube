@@ -7,6 +7,14 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/EdTube.styles.css" asp-append-version="true"/>
+    <style>
+        @@media (min-width: 1600px) {
+          .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
+            max-width: 1520px;
+          }
+        }
+        
+    </style>
 </head>
 <body>
 <header>
@@ -34,7 +42,7 @@
                     @if (User.Identity is {IsAuthenticated: true } && User.IsInRole("Зритель") && !User.IsInRole("Администратор"))
                     {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Author" asp-action="Become">Создать канал</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Author" asp-action="Become">Создать курс</a>
                         </li>
                     }
                     @if (User.Identity is {IsAuthenticated: true } && User.IsInRole("Автор"))

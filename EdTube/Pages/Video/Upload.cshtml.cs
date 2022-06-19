@@ -23,12 +23,11 @@ public class Upload : PageModel
     public async Task<IActionResult> OnGetAsync()
     {
         var userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-        var userCategories = await 
-            _context.Channels.Where(c => c.User.Id == userId).Select(c => c.Category.Name).ToListAsync();
+        var channels = await  _context.Channels.Where(c => c.User.Id == userId).Select(c => c.Name).ToListAsync();
         UploadModel = new UploadVideoModel
         {
             UserId = userId,
-            Categories = new SelectList(userCategories)
+            Channels = new SelectList(channels)
         };
         
         return Page();
@@ -41,15 +40,13 @@ public class Upload : PageModel
             return Page();
         }
 
-        var category = await _context.Categories.FirstOrDefaultAsync(c => c.Name == UploadModel.SelectedCategory);
+        var channel = await _context.Channels.FirstOrDefaultAsync(c => c.Name == UploadModel.SelectedChannel);
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == UploadModel.UserId);
-        var channel = await _context.Channels.FirstOrDefaultAsync(c => c.Category.Id == category.Id && c.User.Id == user.Id);
         var ms = new MemoryStream();
         await UploadModel.Video.CopyToAsync(ms);
 
         var newVideo = new Data.Entities.Video
         {
-            Category = category,
             Name = UploadModel.Name,
             User = user,
             Channel = channel,
@@ -60,7 +57,9 @@ public class Upload : PageModel
         await _context.Videos.AddAsync(newVideo);
 
         await _context.SaveChangesAsync();
-
-        return RedirectToPage("./Index");
+        
+        return UploadModel.AttachTest 
+            ? RedirectToPage("../Test/AddQuestion", new { videoId = newVideo.Id, index = 0 }) 
+            : RedirectToPage("./Index");
     }
 }

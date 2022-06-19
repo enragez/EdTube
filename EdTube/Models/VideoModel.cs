@@ -14,4 +14,6 @@ public class VideoModel
     public string ThumbnailFilePath { get; set; }
     
     public VideoChannelModel ChannelModel { get; set; }
+    
+    public List<TestQuestionModel> Questions { get; set; }
 }

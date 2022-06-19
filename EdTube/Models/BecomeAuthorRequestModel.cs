@@ -7,17 +7,17 @@ public class BecomeAuthorRequestModel
 {
     public string UserId { get; set; }
     
-    [Display(Name = "Название канала")]
+    [Display(Name = "Название курса")]
     public string ChannelName { get; set; }
 
     [Display(Name = "Выбрать категорию")]
-    public string SelectedCategory { get; set; }
+    public string? SelectedCategory { get; set; }
     
     [Display(Name = "Создать новую категорию")]
     public string? NewCategory { get; set; }
     
     public SelectList? Categories { get; set; }
     
-    [Display(Name = "Обложка канала")]
+    [Display(Name = "Обложка курса")]
     public IFormFile File { get; set; }
 }

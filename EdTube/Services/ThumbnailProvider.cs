@@ -12,7 +12,7 @@ public interface IThumbnailProvider
 public class ThumbnailProvider : IThumbnailProvider
 {
     private readonly IWebHostEnvironment _hostEnvironment;
-    private readonly Size _defaultThumbnailSize = new(640, 480);
+    private readonly Size _defaultThumbnailSize = new(320, 240);
     
     private readonly ConcurrentDictionary<int, string> _cache = new();
 

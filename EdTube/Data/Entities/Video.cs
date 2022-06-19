@@ -12,8 +12,6 @@ public class Video
     
     public byte[] Content { get; set; }
     
-    public VideoCategory Category { get; set; }
-    
     public VideoChannel Channel { get; set; }
     
     public string FileName { get; set; }

@@ -13,7 +13,7 @@ public class UserEditModel
     public string Email { get; set; }
     
     [Display(Name = "Новый пароль")]
-    public string NewPassword { get; set; }
+    public string? NewPassword { get; set; }
     
     [Display(Name = "Номер телефона")]
     public string PhoneNumber { get; set; }

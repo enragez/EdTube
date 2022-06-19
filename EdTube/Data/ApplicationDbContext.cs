@@ -13,6 +13,8 @@ public sealed class ApplicationDbContext : IdentityDbContext
     public DbSet<BecomeAuthorRequest> BecomeAuthorRequests { get; set; } = null!;
     
     public DbSet<VideoChannel> Channels { get; set; } = null!;
+    
+    public DbSet<TestQuestion> TestQuestions { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)

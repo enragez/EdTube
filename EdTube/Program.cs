@@ -1,80 +1,20 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using EdTube.Data;
-using EdTube.Services;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
+using ElectronNET.API;
 
-var builder = WebApplication.CreateBuilder(args);
+namespace EdTube;
 
-// Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//    options.UseSqlServer(connectionString));
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-builder.Services.AddDefaultIdentity<IdentityUser>(options =>
-    {            
-        options.SignIn.RequireConfirmedEmail = false;
-        options.SignIn.RequireConfirmedPhoneNumber = false;
-        options.SignIn.RequireConfirmedAccount = false;
-        options.User.AllowedUserNameCharacters = string.Empty;
-        options.Password = new PasswordOptions
-        {
-            RequireDigit = false,
-            RequiredLength = 0,
-            RequireLowercase = false,
-            RequireUppercase = false,
-            RequiredUniqueChars = 0,
-            RequireNonAlphanumeric = false
-        };
-    })
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddControllersWithViews();
-
-builder.Services.Configure<FormOptions>(x =>
+public class Program
 {
-    x.ValueLengthLimit = int.MaxValue;
-    x.MultipartBodyLengthLimit = int.MaxValue;
-    x.MultipartHeadersLengthLimit = int.MaxValue;
-});
+    public static void Main(string[] args)
+    {
+        CreateHostBuilder(args).Build().Run();
+    }
 
-builder.Services.Configure<KestrelServerOptions>(x =>
-{
-    x.Limits.MaxRequestBodySize = int.MaxValue;
-});
-
-builder.Services.AddSingleton<IVideoProvider, VideoProvider>();
-builder.Services.AddSingleton<IThumbnailProvider, ThumbnailProvider>();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseMigrationsEndPoint();
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseElectron(args);
+                webBuilder.UseEnvironment("Development");
+                webBuilder.UseStartup<Startup>();
+            });
 }
-else
-{
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-app.MapRazorPages();
-
-app.Run();

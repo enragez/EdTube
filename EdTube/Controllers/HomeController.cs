@@ -55,7 +55,7 @@ public class HomeController : Controller
             return;
         }
         
-        string[] roleNames = { "Администратор", "Зритель" };
+        string[] roleNames = { "Администратор", "Автор", "Зритель" };
 
         foreach (var roleName in roleNames)
         {

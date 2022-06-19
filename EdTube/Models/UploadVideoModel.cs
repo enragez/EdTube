@@ -10,11 +10,14 @@ public class UploadVideoModel
     [Display(Name = "Название")]
     public string Name { get; set; }
 
-    [Display(Name = "Выбрать категорию")]
-    public string SelectedCategory { get; set; }
+    [Display(Name = "Выбрать канал")]
+    public string SelectedChannel { get; set; }
     
-    public SelectList? Categories { get; set; }
+    public SelectList? Channels { get; set; }
     
     [Display(Name = "Видео")]
     public IFormFile Video { get; set; }
+    
+    [Display(Name = "Создать проверочный материал")]
+    public bool AttachTest { get; set; }
 }
