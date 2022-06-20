@@ -7,13 +7,38 @@
 
 <script>
     function submitAnswers(){
-        var answers = [];
-        
-         $('input').each(function (index, input){
-             console.log(input);
+        var answers = {};
+        var videoId = $('div[videoWrapperId]').attr('videoWrapperId');
+         $('input:checked').each(function (index, input){
+             answers[index] = $(input).attr('answerId')
          })
-        
-        
+        $("#test-knowledge").hide();
+         $.ajax({
+            type: "POST",
+            url: "/Quiz/SubmitAnswers",
+            data: {
+                answers,
+                videoId
+            },
+            success: function (data){
+                $('#quiz').hide();
+                
+                var quizResult = $("#quiz-result");
+                quizResult.html(`Ваш результат: ${data.correctCounter}/${data.questionCount}`)
+                
+                if (data.correctCounter === 0 || data.correctCounter < data.questionCount / 2){
+                    quizResult.addClass("text-danger");
+                }
+                else{
+                    quizResult.addClass("text-success");
+                }
+                quizResult.removeClass("d-none");
+            }
+         })
+    }
+    
+    function startQuiz(){
+        $("#quiz").removeClass("d-none");
     }
 </script>
 
@@ -24,13 +49,13 @@
 <div class="d-flex flex-column align-items-center">
     <h2>Видео с канала: @Model.VideoModel.ChannelModel.Name</h2>
     <div videoWrapperId="@Model.VideoModel.Id">
-        <video id="@($"VideoPlayer-{Model.VideoModel.Id}")" src="@Model.VideoModel.FilePath" controls width="640" height="480" onended="onVideoEnded(arguments[0])"></video>
+        <video id="@($"VideoPlayer-{Model.VideoModel.Id}")" src="@Model.VideoModel.FilePath" controls width="640" height="480"></video>
     </div>
     <h3>@Model.VideoModel.Name</h3>
-    <button id="test-knowledge" class="btn btn-primary">Проверка знаний</button>
+    <button id="test-knowledge" class="btn btn-primary" onclick="startQuiz()">Проверка знаний</button>
 </div>
 
-<div>
+<div id="quiz" class="d-none">
     <h2>Тест:</h2>
     @{
         foreach (var question in Model.VideoModel.Questions.OrderBy(q => q.Index))
@@ -39,22 +64,22 @@
                 <h4>@question.Question</h4>
                 <div class="mt-2 d-flex flex-column">
                     <div>
-                        <input type="radio" id="@($"first{question.Index}")" name="@question.Index"/>
+                        <input type="radio" id="@($"first{question.Index}")" name="@question.Index" answerId="1"/>
                         <label for="@($"first{question.Index}")">1 вариант ответа</label>
                     </div>
 
                     <div>
-                        <input type="radio" id="@($"second{question.Index}")" name="@question.Index"/>
+                        <input type="radio" id="@($"second{question.Index}")" name="@question.Index" answerId="2"/>
                         <label for="@($"second{question.Index}")">2 вариант ответа</label>
                     </div>
 
                     <div>
-                        <input type="radio" id="@($"third{question.Index}")" name="@question.Index"/>
+                        <input type="radio" id="@($"third{question.Index}")" name="@question.Index" answerId="3"/>
                         <label for="@($"third{question.Index}")">3 вариант ответа</label>
                     </div>
 
                     <div>
-                        <input type="radio" id="@($"fourth{question.Index}")" name="@question.Index"/>
+                        <input type="radio" id="@($"fourth{question.Index}")" name="@question.Index" answerId="4"/>
                         <label for="@($"fourth{question.Index}")">4 вариант ответа</label>
                     </div>
                 </div>
@@ -64,5 +89,7 @@
     <div class="form-group" style="margin-top: 8px">
         <button class="btn btn-primary" onclick="submitAnswers()">Завершить</button>
     </div>
+    
             
 </div>
+<h3 id="quiz-result" class="d-none"></h3>
