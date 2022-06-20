@@ -3,6 +3,16 @@
     ViewData["Title"] = "EdTube";
 }
 
+<script>    
+    function openVideo(id){
+        window.location.href = "/Video/View?id=" + id;
+    }
+    
+    function openChannel(id){
+         window.location.href = "/Channel/View?id=" + id;
+    }
+</script>
+
 <style>
     .categories {
         display:  flex;
@@ -29,7 +39,7 @@
         margin: 16px;
     }
     
-    img {
+    .poster > img {
         max-width: 200px;
         max-height: 200px;
         border-radius: 32px;
@@ -39,22 +49,115 @@
         font-size: 24px;
         font-weight: 700;
     }
+    
+    .search-field {
+        position: relative;
+    }
+    
+    .search-input {
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        width: 32rem;
+        border-radius: 8px;
+    }
+    
+    .search-input:active,
+    .search-input:focus {
+        outline-width: 0;
+        border-color:  #0d6efd;
+    }
+    
+    .video-block {
+        cursor: pointer;
+    }
+    
+    .video-thumbnail,
+    .video-thumbnail > img {
+        border-radius: 1rem !important;
+    }
+    
+    .border-solid {
+        border-style: solid;
+    }
 </style>
 
 <div class="text-center">
     <h1 class="display-4">Добро пожаловать на EdTube</h1>
 </div>
 
-<div class="categories">
-    @{
-        foreach (var category in Model.Categories)
+<form asp-action="Search">
+    <div class="m-auto" style="width: 36rem;">
+        <div class="search-field d-flex flex-row mt-3 align-items-center">
+            <input type="text" class="search-input border-1 me-2" asp-for="SearchString"/>
+            <input type="submit" class="btn btn-outline-primary" value="Найти"/>
+        </div>
+    </div>
+</form>
+
+@{
+    if (Model.WithSearchResult)
+    {
+        <div class="mt-5"></div>
+        var hasResults = false;
+        if (Model.ChannelModels.Count > 0)
         {
-            <div class="category">
-                <a class="poster" href="/Categories/View?id=@category.Id">
-                    <img src="data:image/jpeg;base64,@(category.Poster != null ? Convert.ToBase64String(category.Poster) : VideoCategoryModel.EmptyPoster)" alt="@category.Name"/>
-                </a>
-                <div class="category-name">@category.Name</div>
+            hasResults = true;
+            <h2>Каналы найденные по запросу "@Model.SearchString":</h2>
+            <div class="found-channels d-sm-flex flex-wrap">
+                @{
+                    foreach (var channelModel in Model.ChannelModels)
+                    {
+                        <div class="mt-3 mw-3 me-3 video-block " onclick="openChannel(@channelModel.Id)">
+                            <div class="border-2 border-primary border-solid p-2">
+                                <h3 class="text-center">@channelModel.Name</h3>
+                                <img style="width:320px;height: 240px" src="data:image/jpeg;base64,@(channelModel.Poster != null ? Convert.ToBase64String(channelModel.Poster) : VideoCategoryModel.EmptyPoster)" alt="@channelModel.Name"/>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+            <hr/>
+        }
+
+        if (Model.VideoModels.Count > 0)
+        {
+            hasResults = true;
+            <h2>Видео найденные по запросу "@Model.SearchString":</h2>
+            <div class="found-videos d-sm-flex flex-wrap">
+                @foreach (var item in Model.VideoModels)
+                {
+                    <div class="mt-3 mw-3 me-3 video-block " onclick="openVideo(@item.Id)">
+                        <div class="border-2 border-primary border-solid p-2">
+                            <h3 class="text-center">@item.Name</h3>
+                            <div class="video-thumbnail">
+                                <img role="button" videoId="@item.Id" src="@item.ThumbnailFilePath" alt="@item.Name"/>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         }
+
+        if (!hasResults)
+        {
+            <h2>По запросу "@Model.SearchString" ничего не найдено</h2>
+        }
     }
-</div>
+    else
+    {
+        <div class="categories">
+            @{
+                foreach (var category in Model.Categories)
+                {
+                    <div class="category">
+                        <a class="poster" href="/Categories/View?id=@category.Id">
+                            <img src="data:image/jpeg;base64,@(category.Poster != null ? Convert.ToBase64String(category.Poster) : VideoCategoryModel.EmptyPoster)" alt="@category.Name"/>
+                        </a>
+                        <div class="category-name">@category.Name</div>
+                    </div>
+                }
+            }
+        </div>
+    }
+}
+
