@@ -65,22 +65,22 @@
                 <div class="mt-2 d-flex flex-column">
                     <div>
                         <input type="radio" id="@($"first{question.Index}")" name="@question.Index" answerId="1"/>
-                        <label for="@($"first{question.Index}")">1 вариант ответа</label>
+                        <label for="@($"first{question.Index}")">@question.FirstOption</label>
                     </div>
 
                     <div>
                         <input type="radio" id="@($"second{question.Index}")" name="@question.Index" answerId="2"/>
-                        <label for="@($"second{question.Index}")">2 вариант ответа</label>
+                        <label for="@($"second{question.Index}")">@question.SecondOption</label>
                     </div>
 
                     <div>
                         <input type="radio" id="@($"third{question.Index}")" name="@question.Index" answerId="3"/>
-                        <label for="@($"third{question.Index}")">3 вариант ответа</label>
+                        <label for="@($"third{question.Index}")">@question.ThirdOption</label>
                     </div>
 
                     <div>
                         <input type="radio" id="@($"fourth{question.Index}")" name="@question.Index" answerId="4"/>
-                        <label for="@($"fourth{question.Index}")">4 вариант ответа</label>
+                        <label for="@($"fourth{question.Index}")">@question.FourthOption</label>
                     </div>
                 </div>
             </div>
